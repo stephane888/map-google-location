@@ -14,7 +14,7 @@
             class="input-group-text ui-datepicker-trigger"
             @click="trigger_action_map"
           >
-            {{ valide_text }}
+            {{ configs }}
           </button>
         </div>
       </div>
@@ -31,9 +31,10 @@ import config from "./config.js";
 export default {
   name: "googleplace",
   props: {
-    datas: [Object, Array, String, Number],
-    display_marker: { type: Boolean, default: false },
-    model_ref: { type: String, default: "map-google-field" },
+    configs: {
+      type: Object,
+      required: true,
+    },
   },
   components: {
     mapgoogle: () => import("./mapgoogle.vue"),
@@ -63,7 +64,6 @@ export default {
     },
     trigger_action_map() {
       this.$refs.mapgoogle.openPopupMap();
-      console.log("this.$refs.mapgoogle : ", this.$refs.mapgoogle);
     },
     getPlace() {
       var self = this;
@@ -103,6 +103,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-@import "./scss/google-place.scss";
-</style>

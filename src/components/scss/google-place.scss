@@ -1,66 +1,69 @@
-.google-place {
-  .input-group {
-    position: relative;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -ms-flex-align: stretch;
-    align-items: stretch;
-    width: 100%;
-  }
-
-  .input-group {
-    position: relative;
-    > .form-control {
+::v-deep {
+  .google-place {
+    .input-group {
       position: relative;
-      -ms-flex: 1 1 auto;
-      flex: 1 1 auto;
-      width: 1%;
-      margin-bottom: 0;
-      padding-left: 35px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      -ms-flex-align: stretch;
+      align-items: stretch;
+      width: 100%;
     }
-    &::before {
-      content: "";
-      position: absolute;
-      width: 35px;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: auto;
-      background-image: url("/src/assets/geolocation-sprite.png");
-      z-index: 12;
-      background-size: 65px auto;
-      background-size: 65px auto;
-      background-repeat: no-repeat;
-      background-position: 0 center;
-    }
-  }
 
-  .input-group-text {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: center;
-    align-items: center;
-    padding: 0.375rem 0.75rem;
-    margin-bottom: 0;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #495057;
-    text-align: center;
-    white-space: nowrap;
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    //@at-root
-    background-color: #00a3dd;
-    border: 1px solid #00a3dd;
-    color: #fff;
-    font-weight: 600;
-    font-family: inherit;
-    font-size: 18px;
-    padding: 12px 26px;
-    border-radius: 0 5px 5px 0;
+    .input-group {
+      position: relative;
+      > .form-control {
+        position: relative;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        width: 1%;
+        margin-bottom: 0;
+        padding-left: 35px;
+        border-radius: 5px 0 0 5px;
+      }
+      &::before {
+        content: "";
+        position: absolute;
+        width: 35px;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: auto;
+        background-image: url("/src/assets/geolocation-sprite.png");
+        z-index: 12;
+        background-size: 65px auto;
+        background-size: 65px auto;
+        background-repeat: no-repeat;
+        background-position: 0 center;
+      }
+    }
+
+    .input-group-text {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+      align-items: center;
+      padding: 0.375rem 0.75rem;
+      margin-bottom: 0;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #495057;
+      text-align: center;
+      white-space: nowrap;
+      background-color: #e9ecef;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+      //@at-root
+      background-color: #00a3dd;
+      border: 1px solid #00a3dd;
+      color: #fff;
+      font-weight: 600;
+      font-family: inherit;
+      font-size: 18px;
+      padding: 12px 26px;
+      border-radius: 0 5px 5px 0;
+    }
   }
 }

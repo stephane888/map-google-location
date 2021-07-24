@@ -10,6 +10,8 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.12.1",
     "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
+    "bootstrap-vue": "^2.21.2",
     "cookie-light": "^0.0.1",
     "core-js": "^3.6.5",
     "micromodal": "^0.4.6",

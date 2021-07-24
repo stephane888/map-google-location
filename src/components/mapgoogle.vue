@@ -43,20 +43,9 @@
                 >
                   Confirmer l'adresse
                 </button>
-                <a href="/cart" v-show="show_cart">Panier</a>
               </div>
             </div>
           </main>
-          <footer class="modal__footer" v-if="show_footer">
-            <button class="modal__btn modal__btn-primary">Continue</button>
-            <button
-              class="modal__btn"
-              data-micromodal-close
-              aria-label="Close this dialog window"
-            >
-              Close
-            </button>
-          </footer>
         </div>
       </div>
     </section>
@@ -66,7 +55,6 @@
 <script>
 const villes = [];
 const list_box = [];
-import Cookies from "cookie-light";
 import config from "./config.js";
 //import modalLite from "modal-lite";
 import micromodal from "micromodal";
@@ -84,6 +72,19 @@ export default {
   data() {
     return {
       id_html: "map-google-field",
+      villes: villes,
+      list_box: list_box,
+      micromodal: micromodal,
+      map: null,
+      lat: 45.7941459,
+      lon: 4.68941940000002,
+      point_in_polygon: false,
+      point_in_ville: false,
+      point_in_box: false,
+      titre_popup: "Merci de confirmer votre adresse",
+      current_address: "",
+      valide_text: "Commander maintenant",
+      placeholder: "Entrez votre adresse",
     };
   },
   mounted() {
@@ -91,8 +92,6 @@ export default {
     this.point_in_polygon = false;
     this.point_in_ville = false;
     this.createGoogleObject();
-    // this.micromodal.init();
-    // this.micromodal.show("map-popup-wbu");
   },
   methods: {
     openPopupMap() {
@@ -112,17 +111,16 @@ export default {
         this.geocoder = new this.GoogleObejct.maps.Geocoder();
       });
     },
-    oninput: function (event) {
-      this.$emit("input", event.target.value);
-      this.current_address = event.target.value;
-    },
+    /**
+     * Permet d'ajouter la recherche de ville sur le champs qui est rattaché.
+     */
     getPlace() {
       var self = this;
       /**
        * Pour obtenir les coordonnées
        * https://www.mapcoordinates.net/fr
        */
-      var input = document.querySelector("#" + this.id_html);
+      var input = document.querySelector("#map-input-over");
       this.options = {
         componentRestrictions: { country: ["fr"] },
         types: ["address"],
@@ -138,7 +136,7 @@ export default {
         "place_changed",
         function () {
           var place = autocomplete.getPlace();
-          console.log("place : ", place);
+
           if (place && place.formatted_address) {
             self.current_address = place.formatted_address;
             self.city_on_map = place.vicinity;
@@ -148,39 +146,8 @@ export default {
         }
       );
     },
-    /**
-     * -
-     */
-    getPlace2() {
-      var self = this;
-      var input2 = document.querySelector("#map-input-over");
-      //console.log(input2);
-      const autocomplete2 = new this.GoogleObejct.maps.places.Autocomplete(
-        input2,
-        this.options
-      );
-
-      this.GoogleObejct.maps.event.addListener(
-        autocomplete2,
-        "place_changed",
-        function () {
-          var place = autocomplete2.getPlace();
-          console.log("place2 : ", place);
-          if (place && place.formatted_address) {
-            self.city_on_map = place.vicinity;
-            self.current_address = place.formatted_address;
-            //console.log(place);
-            self.updateMap(place);
-          }
-        }
-      );
-    },
     initMap() {
       var self = this;
-      //console.log("Chargement de la map");
-      //https://nouvelle-techno.fr/actualites/2017/12/06/pas-a-pas-inserer-une-carte-google-maps-avec-lapi-google-maps-javascript
-      //https://developers.google.com/maps/documentation/javascript/styling
-      //https://developers-dot-devsite-v2-prod.appspot.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch?authuser=1
       var lat = this.lat;
       var lon = this.lon;
       // CrÃ©er l'objet "map" et l'insÃ¨rer dans l'Ã©lÃ©ment HTML qui a l'ID "map"
@@ -264,18 +231,14 @@ export default {
         }
       );
       this.setMarker();
-      /**
-       * detect change
-       */
       this.map.addListener("dragend", function () {
-        //console.log('methode event in maps')
         window.setTimeout(function () {
           var centerPosition = self.map.getCenter();
           if (centerPosition) {
             self.lat = centerPosition.lat();
             self.lon = centerPosition.lng();
             self.city_on_map = "";
-            //console.log('Lat',self.lat, "Long", self.lon);
+
             self.obtenir_address_proche();
           }
         }, 1000);
@@ -289,7 +252,6 @@ export default {
         this.lat = place.geometry.location.lat();
         this.lon = place.geometry.location.lng();
         this.setMarker();
-        //console.log('Map update : ',this.lat, this.lon);
         this.valide_selection();
       }
     },
@@ -297,20 +259,15 @@ export default {
       this.check_if_new_adress_in_polygon();
       this.check_if_new_adress_in_villes();
       this.check_if_new_adress_in_box();
-      console.log("this.point_in_box end : ", this.point_in_box);
     },
     obtenir_address_proche() {
       var self = this;
-      console.log("recherche les adresses proches");
       var latlng = new this.GoogleObejct.maps.LatLng(this.lat, this.lon);
       this.geocoder.geocode({ location: latlng }, function (results, status) {
         if (status == "OK") {
-          console.log(results);
           self.current_address = results[0].formatted_address;
           self.updateMap(results[0]);
           self.getNameVilleFromPlace(results[0]);
-        } else {
-          //console.log('Geocode was not successful for the following reason: ' + status);
         }
       });
     },
@@ -321,27 +278,20 @@ export default {
       var self = this;
       var lat = this.lat;
       var lon = this.lon;
-      //console.log(lat, lon);
       // Nous ajoutons un marqueur
       this.marker = new this.GoogleObejct.maps.Marker({
-        // Nous dÃ©finissons sa position (syntaxe json)
         position: { lat: lat, lng: lon },
-        // Nous dÃ©finissons Ã  quelle carte il est ajoutÃ©
         map: self.map,
         icon: this.image,
       });
     },
     save_localisation_cookie() {
-      //console.log('save current address ');
       if (this.current_address == "") {
-        Cookies.remove("wbu_localisation_map");
+        localStorage.removeItem("wbu_localisation_map");
         alert("Vous devez definir une adresse");
         return false;
       }
       if (this.point_in_polygon && this.point_in_ville && this.point_in_box) {
-        //console.log('Good ville');
-        Cookies.set("wbu_localisation_map", this.current_address);
-        //
         localStorage.setItem(
           "wbu_localisation_map",
           JSON.stringify(this.current_address)
@@ -350,13 +300,11 @@ export default {
           "wbu_localisation_city",
           JSON.stringify(this.city_on_map)
         );
-        //
         localStorage.setItem("wbu_locality", this.locality);
         localStorage.setItem("wbu_route", this.route);
         // IMPORTANT;
         //$(document).trigger("adresseUpdate");
         alert("trigger adresseUpdate 1 ");
-
         if (!this.etape_checkout) {
           window.location.href = this.url_good;
         } else {
@@ -366,7 +314,6 @@ export default {
           }
         }
       } else {
-        Cookies.remove("wbu_localisation_map");
         localStorage.removeItem("wbu_localisation_map");
         localStorage.removeItem("wbu_localisation_city");
         // IMPORANT;
@@ -376,7 +323,6 @@ export default {
       }
     },
     buildpolygon() {
-      //console.log('Construction du polygon : ',area);
       this.polygon = new this.GoogleObejct.maps.Polygon({
         path: config.points,
         geodesic: true,
@@ -421,18 +367,13 @@ export default {
         this.point_in_ville = true;
         return false;
       }
-      //console.log(this.villes);
-      //console.log(this.city_on_map);
       if (this.villes.indexOf(this.city_on_map) >= 0) {
-        //console.log('The ville contains the address');
         this.point_in_ville = true;
         return true;
       } else if (ville_in_name()) {
-        //console.log('The ville contains the address by name');
         this.point_in_ville = true;
         return true;
       } else {
-        //console.log('The address is outside of the ville.');
         this.point_in_ville = false;
       }
     },
@@ -453,8 +394,6 @@ export default {
         }
         return view;
       };
-      //console.log(' this.point_in_box : ', this.point_in_box);
-      //console.log(' This.type_limitation : ', this.type_limitation );
       if (this.type_limitation != "polygon_box") {
         this.point_in_box = true;
         return false;
@@ -466,22 +405,6 @@ export default {
         this.point_in_box = false;
         return true;
       }
-    },
-    /**
-     * -
-     */
-    getInfosAboutCity: function (adress) {
-      console.log("getInfosAboutCity adress : ", adress);
-      const geocoder = new this.GoogleObejct.maps.Geocoder();
-      this.lon;
-      const latlng = {
-        lat: this.lat,
-        lng: this.lon,
-      };
-      console.log("latlng : ", latlng);
-      geocoder.geocode({ location: latlng }, (results, status) => {
-        console.log(results, status);
-      });
     },
     /**
      * -
@@ -514,6 +437,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-@import "./scss/micromodal.scss";
-</style>

@@ -2,14 +2,13 @@
   <div id="app">
     <div class="container-map-localisation">
       <h1>Localisation google</h1>
-      <googleplace></googleplace>
+      <googleplace :configs="configs"></googleplace>
       <div id="mapGoogleLocalisation" class="map-localisation-wbu">
-        <mapgoogle
-          :image="asset_url"
-          :url_good="url_good"
-          :url_bad="url_bad"
-        ></mapgoogle>
+        <mapgoogle :configs="configs"></mapgoogle>
       </div>
+    </div>
+    <div>
+      <manager-config></manager-config>
     </div>
   </div>
 </template>
@@ -17,6 +16,7 @@
 <script>
 import mapgoogle from "./components/mapgoogle.vue";
 import googleplace from "./components/googleplace.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "App",
@@ -24,6 +24,7 @@ export default {
     //mapgoogle: () => import("./components/mapgoogle.vue"),
     mapgoogle,
     googleplace,
+    managerConfig: () => import("./components/admin/manage-config.vue"),
   },
   data() {
     return {
@@ -32,16 +33,13 @@ export default {
       url_bad: "",
     };
   },
+  computed: {
+    ...mapState(["configs"]),
+  },
 };
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss" scoped>
+@import "./components/scss/micromodal.scss";
+@import "./components/scss/google-place.scss";
 </style>
