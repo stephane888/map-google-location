@@ -6,7 +6,7 @@
           :id="id_html"
           class="form-control"
           type="text"
-          :placeholder="placeholder"
+          :placeholder="configs.input_placeholder.value"
           v-model="current_address"
         />
         <div class="input-group-prepend">
@@ -14,13 +14,13 @@
             class="input-group-text ui-datepicker-trigger"
             @click="trigger_action_map"
           >
-            {{ configs }}
+            {{ configs.input_text_button.value }}
           </button>
         </div>
       </div>
     </div>
     <div>
-      <mapgoogle ref="mapgoogle"> </mapgoogle>
+      <mapgoogle ref="mapgoogle" :configs="configs"> </mapgoogle>
     </div>
   </div>
 </template>

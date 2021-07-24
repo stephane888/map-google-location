@@ -53,8 +53,6 @@
 </template>
 
 <script>
-const villes = [];
-const list_box = [];
 import config from "./config.js";
 //import modalLite from "modal-lite";
 import micromodal from "micromodal";
@@ -63,7 +61,10 @@ import micromodal from "micromodal";
 export default {
   name: "mapgoogle",
   props: {
-    datas: [Object, Array, String, Number],
+    configs: {
+      type: Object,
+      required: true,
+    },
     display_marker: { type: Boolean, default: true },
     image: { type: String, default: "/localisation/img/marker.png" },
     url_good: { type: String, default: "/cart" },
@@ -72,8 +73,8 @@ export default {
   data() {
     return {
       id_html: "map-google-field",
-      villes: villes,
-      list_box: list_box,
+      villes: config.convertNewLineToArray(this.configs.villes.value, ";"),
+      list_box: config.convertNewLineToArray(this.configs.bps.value),
       micromodal: micromodal,
       map: null,
       lat: 45.7941459,
@@ -304,7 +305,6 @@ export default {
         localStorage.setItem("wbu_route", this.route);
         // IMPORTANT;
         //$(document).trigger("adresseUpdate");
-        alert("trigger adresseUpdate 1 ");
         if (!this.etape_checkout) {
           window.location.href = this.url_good;
         } else {
@@ -318,13 +318,12 @@ export default {
         localStorage.removeItem("wbu_localisation_city");
         // IMPORANT;
         //$(document).trigger("adresseUpdate");
-        alert("trigger adresseUpdate 2 ");
         window.location.href = this.url_bad;
       }
     },
     buildpolygon() {
       this.polygon = new this.GoogleObejct.maps.Polygon({
-        path: config.points,
+        path: config.extractPathForPolygon(this.configs.zone_valide.value),
         geodesic: true,
         strokeColor: "#48a0d9",
         strokeOpacity: 0.4,

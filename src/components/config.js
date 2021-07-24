@@ -66,4 +66,27 @@ export default {
         });
     });
   },
+  extractPathForPolygon(geoString) {
+    const geojson = JSON.parse(geoString);
+    const points = [];
+    if (
+      geojson.features &&
+      geojson.features[0] &&
+      geojson.features[0].geometry &&
+      geojson.features[0].geometry.coordinates
+    ) {
+      for (const i in geojson.features[0].geometry.coordinates[0]) {
+        const point = geojson.features[0].geometry.coordinates[0][i];
+        points.push({ lat: point[1], lng: point[0] });
+      }
+    }
+    return points;
+  },
+  /**
+   * Permet de slpit and trim chaque elment;
+   * @param {*} string
+   */
+  convertNewLineToArray(string, serach = "\n") {
+    return string.split(serach).map((item) => item.trim());
+  },
 };

@@ -142,6 +142,8 @@
 
   .micromodal-slide {
     display: none;
+    position: relative;
+    z-index: 10;
   }
 
   .micromodal-slide.is-open {
