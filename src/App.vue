@@ -1,17 +1,36 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <div class="container-map-localisation">
+      <h1>Localisation google</h1>
+      <googleplace></googleplace>
+      <div id="mapGoogleLocalisation" class="map-localisation-wbu">
+        <mapgoogle
+          :image="asset_url"
+          :url_good="url_good"
+          :url_bad="url_bad"
+        ></mapgoogle>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import mapgoogle from "./components/mapgoogle.vue";
+import googleplace from "./components/googleplace.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    //mapgoogle: () => import("./components/mapgoogle.vue"),
+    mapgoogle,
+    googleplace,
+  },
+  data() {
+    return {
+      asset_url: "",
+      url_good: "",
+      url_bad: "",
+    };
   },
 };
 </script>

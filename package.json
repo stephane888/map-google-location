@@ -3,16 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.12.1",
+    "axios": "^0.21.1",
+    "cookie-light": "^0.0.1",
     "core-js": "^3.6.5",
+    "micromodal": "^0.4.6",
+    "modal-lite": "^2.2.0",
     "vue": "^2.6.11",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@types/google.maps": "^3.45.6",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
@@ -23,6 +29,8 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",
     "prettier": "^2.2.1",
+    "sass": "^1.35.2",
+    "sass-loader": "^10.2.0",
     "vue-template-compiler": "^2.6.11"
   }
 }
