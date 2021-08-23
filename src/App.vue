@@ -5,7 +5,7 @@
       <googleplace :configs="configs"></googleplace>
     </div>
     <div>
-      <manager-config></manager-config>
+      <manager-config :configs="configs"></manager-config>
     </div>
   </div>
 </template>

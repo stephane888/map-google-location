@@ -23,6 +23,9 @@
     border-radius: 4px;
     overflow-y: auto;
     box-sizing: border-box;
+    *:focus-visible {
+      outline: -webkit-focus-ring-color auto 1px;
+    }
   }
 
   .modal__header {
@@ -148,6 +151,8 @@
 
   .micromodal-slide.is-open {
     display: block;
+    opacity: 1;
+    visibility: visible;
   }
 
   .micromodal-slide[aria-hidden="false"] .modal__overlay {

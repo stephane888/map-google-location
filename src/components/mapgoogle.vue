@@ -14,8 +14,9 @@
         >
           <header class="modal__header">
             <h2 class="modal__title" id="modal-1-title">
-              {{ titre_popup }}
+              {{ configs.titre_map.value }}
             </h2>
+
             <a
               href="#"
               class="modal__close"
@@ -54,21 +55,27 @@
 
 <script>
 import config from "./config.js";
-//import modalLite from "modal-lite";
 import micromodal from "micromodal";
 
-//import axios from "axios";
 export default {
-  name: "mapgoogle",
+  name: "Mapgoogle",
   props: {
     configs: {
       type: Object,
-      required: true,
+      required: true
     },
-    display_marker: { type: Boolean, default: true },
+    displayMarker: { type: Boolean, default: true },
     image: { type: String, default: "/localisation/img/marker.png" },
-    url_good: { type: String, default: "/cart" },
-    url_bad: { type: String, default: "/pages/map-error" },
+    urlGood: { type: String, default: "/cart" },
+    urlBad: { type: String, default: "/pages/map-error" },
+    etapeCheckout: {
+      type: Boolean,
+      default: true
+    },
+    actionAfter: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -85,7 +92,7 @@ export default {
       titre_popup: "Merci de confirmer votre adresse",
       current_address: "",
       valide_text: "Commander maintenant",
-      placeholder: "Entrez votre adresse",
+      placeholder: "Entrez votre adresse"
     };
   },
   mounted() {
@@ -93,6 +100,9 @@ export default {
     this.point_in_polygon = false;
     this.point_in_ville = false;
     this.createGoogleObject();
+    this.current_address = this.$store.state.location.current_address
+      ? this.$store.state.location.current_address
+      : "";
   },
   methods: {
     openPopupMap() {
@@ -105,7 +115,7 @@ export default {
      * On charge la map
      */
     createGoogleObject() {
-      config.createGoogleObject().then((google) => {
+      config.createGoogleObject().then(google => {
         this.GoogleObejct = google;
         this.getPlace();
         this.initMap();
@@ -125,7 +135,7 @@ export default {
       this.options = {
         componentRestrictions: { country: ["fr"] },
         types: ["address"],
-        strictBounds: true,
+        strictBounds: true
       };
 
       const autocomplete = new this.GoogleObejct.maps.places.Autocomplete(
@@ -135,7 +145,7 @@ export default {
       this.GoogleObejct.maps.event.addListener(
         autocomplete,
         "place_changed",
-        function () {
+        function() {
           var place = autocomplete.getPlace();
 
           if (place && place.formatted_address) {
@@ -168,7 +178,7 @@ export default {
 
           mapTypeControlOptions: {
             // Cette option sert Ã  dÃ©finir comment les options se placent
-            style: this.GoogleObejct.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            style: this.GoogleObejct.maps.MapTypeControlStyle.HORIZONTAL_BAR
           },
 
           // Activation des options de navigation dans la carte (zoom...)
@@ -180,7 +190,7 @@ export default {
 
           navigationControlOptions: {
             // Comment ces options doivent-elles s'afficher
-            style: this.GoogleObejct.maps.NavigationControlStyle.ZOOM_PAN,
+            style: this.GoogleObejct.maps.NavigationControlStyle.ZOOM_PAN
           },
           styles: [
             //desactive les localisations.
@@ -206,34 +216,34 @@ export default {
             {
               featureType: "poi",
               elementType: "labels.text.stroke",
-              stylers: [{ visibility: "off" }],
+              stylers: [{ visibility: "off" }]
             },
             {
               featureType: "landscape.natural",
               elementType: "geometry",
-              stylers: [{ color: "#b8cb92" }],
+              stylers: [{ color: "#b8cb92" }]
             },
             {
               featureType: "landscape.man_made",
               elementType: "geometry",
-              stylers: [{ color: "#ece2d9" }],
+              stylers: [{ color: "#ece2d9" }]
             },
             {
               featureType: "road",
               elementType: "geometry",
-              stylers: [{ color: "#ffffff" }],
+              stylers: [{ color: "#ffffff" }]
             },
             {
               featureType: "road.highway",
               elementType: "labels",
-              stylers: [{ visibility: "off" }],
-            },
-          ],
+              stylers: [{ visibility: "off" }]
+            }
+          ]
         }
       );
       this.setMarker();
-      this.map.addListener("dragend", function () {
-        window.setTimeout(function () {
+      this.map.addListener("dragend", function() {
+        window.setTimeout(function() {
           var centerPosition = self.map.getCenter();
           if (centerPosition) {
             self.lat = centerPosition.lat();
@@ -247,7 +257,7 @@ export default {
       this.buildpolygon();
       this.valide_selection();
     },
-    updateMap: function (place) {
+    updateMap: function(place) {
       if (place.geometry) {
         this.map.panTo(place.geometry.location);
         this.lat = place.geometry.location.lat();
@@ -264,7 +274,7 @@ export default {
     obtenir_address_proche() {
       var self = this;
       var latlng = new this.GoogleObejct.maps.LatLng(this.lat, this.lon);
-      this.geocoder.geocode({ location: latlng }, function (results, status) {
+      this.geocoder.geocode({ location: latlng }, function(results, status) {
         if (status == "OK") {
           self.current_address = results[0].formatted_address;
           self.updateMap(results[0]);
@@ -273,7 +283,7 @@ export default {
       });
     },
     setMarker() {
-      if (!this.display_marker) {
+      if (!this.displayMarker) {
         return false;
       }
       var self = this;
@@ -283,16 +293,18 @@ export default {
       this.marker = new this.GoogleObejct.maps.Marker({
         position: { lat: lat, lng: lon },
         map: self.map,
-        icon: this.image,
+        icon: this.image
       });
     },
     save_localisation_cookie() {
       if (this.current_address == "") {
-        localStorage.removeItem("wbu_localisation_map");
+        //localStorage.removeItem("wbu_localisation_map");
+        this.$store.dispatch("setLocation", "");
         alert("Vous devez definir une adresse");
         return false;
       }
       if (this.point_in_polygon && this.point_in_ville && this.point_in_box) {
+        /*
         localStorage.setItem(
           "wbu_localisation_map",
           JSON.stringify(this.current_address)
@@ -303,33 +315,46 @@ export default {
         );
         localStorage.setItem("wbu_locality", this.locality);
         localStorage.setItem("wbu_route", this.route);
+        /** */
+        const location = {
+          current_address: this.current_address,
+          city_on_map: this.city_on_map,
+          locality: this.locality,
+          route: this.route
+        };
+        this.$store.dispatch("setLocation", location);
+        this.$emit("update_location", location);
         // IMPORTANT;
         //$(document).trigger("adresseUpdate");
-        if (!this.etape_checkout) {
-          window.location.href = this.url_good;
+        if (this.etapeCheckout) {
+          window.location.href = this.urlGood;
         } else {
           document.querySelector(".modal__close").click();
-          if (!this.no_action_after) {
+          if (this.actionAfter) {
             document.querySelector(".button.cart-checkout-custom").click();
           }
         }
       } else {
-        localStorage.removeItem("wbu_localisation_map");
-        localStorage.removeItem("wbu_localisation_city");
+        //localStorage.removeItem("wbu_localisation_map");
+        //localStorage.removeItem("wbu_localisation_city");
         // IMPORANT;
         //$(document).trigger("adresseUpdate");
-        window.location.href = this.url_bad;
+        this.$store.dispatch("setLocation", "");
+        window.location.href = this.urlBad;
       }
     },
+    /**
+     * -
+     */
     buildpolygon() {
       this.polygon = new this.GoogleObejct.maps.Polygon({
         path: config.extractPathForPolygon(this.configs.zone_valide.value),
         geodesic: true,
         strokeColor: "#48a0d9",
-        strokeOpacity: 0.4,
+        strokeOpacity: 0.5,
         strokeWeight: 4,
         fillColor: "#48a0d9",
-        fillOpacity: 0.03,
+        fillOpacity: 0.15
       });
       this.polygon.setMap(this.map);
     },
@@ -352,7 +377,7 @@ export default {
         if (this.current_address && this.current_address.length > 0) {
           var ar_ville = this.current_address.split(",");
           if (ar_ville[1].length > 0) {
-            this.villes.forEach((ville) => {
+            this.villes.forEach(ville => {
               if (ar_ville[1].indexOf(ville) >= 0) {
                 view = true;
               }
@@ -384,7 +409,7 @@ export default {
         var view = false;
         if (this.current_address && this.current_address.length > 0) {
           if (this.current_address) {
-            this.list_box.forEach((box) => {
+            this.list_box.forEach(box => {
               if (this.current_address.indexOf(box) >= 0) {
                 view = true;
               }
@@ -408,7 +433,7 @@ export default {
     /**
      * -
      */
-    getNameVilleFromPlace: function (place) {
+    getNameVilleFromPlace(place) {
       var route = "";
       var locality = "";
       if (place.address_components) {
@@ -432,7 +457,7 @@ export default {
         this.route = route;
         this.locality = locality;
       }
-    },
-  },
+    }
+  }
 };
 </script>

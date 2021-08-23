@@ -27,6 +27,7 @@
 
 <script>
 import config from "./config.js";
+import mapgoogle from "./mapgoogle.vue";
 
 export default {
   name: "googleplace",
@@ -37,7 +38,7 @@ export default {
     },
   },
   components: {
-    mapgoogle: () => import("./mapgoogle.vue"),
+    mapgoogle,
   },
   data: function () {
     return {
