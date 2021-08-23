@@ -1,7 +1,6 @@
 export default {
   getLocation() {
-    const l = localStorage.getItem("wbu-google-location");
-    return l !== null && l !== undefined ? JSON.parse(l) : "";
+    return "";
   },
   getConfig() {
     if (window.googleConfig) return window.googleConfig;
