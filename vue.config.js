@@ -30,6 +30,6 @@ module.exports = {
     /**/
   },
   devServer: {
-    host: "map-google-location.kksa",
+    // host: "map-google-location.kksa",
   },
 };

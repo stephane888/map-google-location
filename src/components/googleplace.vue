@@ -30,7 +30,7 @@ import config from "./config.js";
 import mapgoogle from "./mapgoogle.vue";
 
 export default {
-  name: "googleplace",
+  name: "Googleplace",
   props: {
     configs: {
       type: Object,

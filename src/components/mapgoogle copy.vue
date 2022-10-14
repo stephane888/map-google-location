@@ -84,7 +84,7 @@ import micromodal from "micromodal";
 
 //import axios from "axios";
 export default {
-  name: "mapgoogle",
+  name: "Mapgoogle",
   props: {
     datas: [Object, Array, String, Number],
     display_marker: { type: Boolean, default: false },

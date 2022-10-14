@@ -19,18 +19,18 @@ export default {
   props: {
     etapeCheckout: {
       type: Boolean,
-      required: true
+      required: true,
     },
     actionAfter: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
-    mapgoogle
+    mapgoogle,
   },
   computed: {
-    ...mapState(["configs"])
+    ...mapState(["configs"]),
   },
 
   methods: {
@@ -39,8 +39,8 @@ export default {
     },
     update_location(l) {
       this.$emit("update_location", l);
-    }
-  }
+    },
+  },
 };
 </script>
 
