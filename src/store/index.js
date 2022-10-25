@@ -9,7 +9,7 @@ export default new Vuex.Store({
     /**
      * Contient les données de localisation choisie par l'utilisateur ou charger à partir de localstorage.
      */
-    location: utilitie.getLocation()
+    location: utilitie.getLocation(),
   },
   mutations: {
     LOCATION: (state, payload) => {
@@ -18,7 +18,7 @@ export default new Vuex.Store({
     UpdateConfig: (state, payload) => {
       console.log("UpdateConfig : ", payload);
       state.configs = payload;
-    }
+    },
   },
   actions: {
     setLocation({ commit }, payload) {
@@ -27,7 +27,7 @@ export default new Vuex.Store({
     },
     setUpdateConfig({ commit }, payload) {
       commit("UpdateConfig", payload);
-    }
+    },
   },
-  modules: {}
+  modules: {},
 });

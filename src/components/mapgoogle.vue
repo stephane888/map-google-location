@@ -4,7 +4,7 @@
 <template>
   <div>
     <!-- https://micromodal.vercel.app/ -->
-    <section class="modal micromodal-slide" id="map-popup-wbu">
+    <section id="map-popup-wbu" class="modal micromodal-slide">
       <div class="modal__overlay">
         <div
           class="modal__container"
@@ -13,7 +13,7 @@
           aria-labelledby="modal-1-title"
         >
           <header class="modal__header">
-            <h2 class="modal__title" id="modal-1-title">
+            <h2 id="modal-1-title" class="modal__title">
               {{ configs.titre_map.value }}
             </h2>
 
@@ -24,16 +24,16 @@
               @click="micromodal.close('map-popup-wbu')"
             ></a>
           </header>
-          <main class="modal__content" id="modal-1-content">
+          <main id="modal-1-content" class="modal__content">
             <div class="m-0 p-0 container-map">
               <div id="map-display-wbu"></div>
               <div class="text-over-lay">
                 <input
+                  id="map-input-over"
+                  v-model="current_address"
                   class="form-control"
                   type="text"
-                  v-model="current_address"
                   :placeholder="placeholder"
-                  id="map-input-over"
                 />
               </div>
               <div class="center-marker"></div>
@@ -58,11 +58,11 @@ import config from "./config.js";
 import micromodal from "micromodal";
 
 export default {
-  name: "Mapgoogle",
+  name: "MapGoogle",
   props: {
     configs: {
       type: Object,
-      required: true
+      required: true,
     },
     displayMarker: { type: Boolean, default: true },
     image: { type: String, default: "/localisation/img/marker.png" },
@@ -70,12 +70,12 @@ export default {
     urlBad: { type: String, default: "/pages/map-error" },
     etapeCheckout: {
       type: Boolean,
-      default: true
+      default: true,
     },
     actionAfter: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -92,7 +92,7 @@ export default {
       titre_popup: "Merci de confirmer votre adresse",
       current_address: "",
       valide_text: "Commander maintenant",
-      placeholder: "Entrez votre adresse"
+      placeholder: "Entrez votre adresse",
     };
   },
   mounted() {
@@ -115,7 +115,7 @@ export default {
      * On charge la map
      */
     createGoogleObject() {
-      config.createGoogleObject().then(google => {
+      config.createGoogleObject().then((google) => {
         this.GoogleObejct = google;
         this.getPlace();
         this.initMap();
@@ -135,7 +135,7 @@ export default {
       this.options = {
         componentRestrictions: { country: ["fr"] },
         types: ["address"],
-        strictBounds: true
+        strictBounds: true,
       };
 
       const autocomplete = new this.GoogleObejct.maps.places.Autocomplete(
@@ -145,7 +145,7 @@ export default {
       this.GoogleObejct.maps.event.addListener(
         autocomplete,
         "place_changed",
-        function() {
+        function () {
           var place = autocomplete.getPlace();
 
           if (place && place.formatted_address) {
@@ -178,7 +178,7 @@ export default {
 
           mapTypeControlOptions: {
             // Cette option sert Ã  dÃ©finir comment les options se placent
-            style: this.GoogleObejct.maps.MapTypeControlStyle.HORIZONTAL_BAR
+            style: this.GoogleObejct.maps.MapTypeControlStyle.HORIZONTAL_BAR,
           },
 
           // Activation des options de navigation dans la carte (zoom...)
@@ -190,7 +190,7 @@ export default {
 
           navigationControlOptions: {
             // Comment ces options doivent-elles s'afficher
-            style: this.GoogleObejct.maps.NavigationControlStyle.ZOOM_PAN
+            style: this.GoogleObejct.maps.NavigationControlStyle.ZOOM_PAN,
           },
           styles: [
             //desactive les localisations.
@@ -216,34 +216,34 @@ export default {
             {
               featureType: "poi",
               elementType: "labels.text.stroke",
-              stylers: [{ visibility: "off" }]
+              stylers: [{ visibility: "off" }],
             },
             {
               featureType: "landscape.natural",
               elementType: "geometry",
-              stylers: [{ color: "#b8cb92" }]
+              stylers: [{ color: "#b8cb92" }],
             },
             {
               featureType: "landscape.man_made",
               elementType: "geometry",
-              stylers: [{ color: "#ece2d9" }]
+              stylers: [{ color: "#ece2d9" }],
             },
             {
               featureType: "road",
               elementType: "geometry",
-              stylers: [{ color: "#ffffff" }]
+              stylers: [{ color: "#ffffff" }],
             },
             {
               featureType: "road.highway",
               elementType: "labels",
-              stylers: [{ visibility: "off" }]
-            }
-          ]
+              stylers: [{ visibility: "off" }],
+            },
+          ],
         }
       );
       this.setMarker();
-      this.map.addListener("dragend", function() {
-        window.setTimeout(function() {
+      this.map.addListener("dragend", function () {
+        window.setTimeout(function () {
           var centerPosition = self.map.getCenter();
           if (centerPosition) {
             self.lat = centerPosition.lat();
@@ -257,7 +257,7 @@ export default {
       this.buildpolygon();
       this.valide_selection();
     },
-    updateMap: function(place) {
+    updateMap: function (place) {
       if (place.geometry) {
         this.map.panTo(place.geometry.location);
         this.lat = place.geometry.location.lat();
@@ -274,7 +274,7 @@ export default {
     obtenir_address_proche() {
       var self = this;
       var latlng = new this.GoogleObejct.maps.LatLng(this.lat, this.lon);
-      this.geocoder.geocode({ location: latlng }, function(results, status) {
+      this.geocoder.geocode({ location: latlng }, function (results, status) {
         if (status == "OK") {
           self.current_address = results[0].formatted_address;
           self.updateMap(results[0]);
@@ -293,7 +293,7 @@ export default {
       this.marker = new this.GoogleObejct.maps.Marker({
         position: { lat: lat, lng: lon },
         map: self.map,
-        icon: this.image
+        icon: this.image,
       });
     },
     save_localisation_cookie() {
@@ -320,7 +320,7 @@ export default {
           current_address: this.current_address,
           city_on_map: this.city_on_map,
           locality: this.locality,
-          route: this.route
+          route: this.route,
         };
         this.$store.dispatch("setLocation", location);
         this.$emit("update_location", location);
@@ -354,7 +354,7 @@ export default {
         strokeOpacity: 0.5,
         strokeWeight: 4,
         fillColor: "#48a0d9",
-        fillOpacity: 0.15
+        fillOpacity: 0.15,
       });
       this.polygon.setMap(this.map);
     },
@@ -377,7 +377,7 @@ export default {
         if (this.current_address && this.current_address.length > 0) {
           var ar_ville = this.current_address.split(",");
           if (ar_ville[1].length > 0) {
-            this.villes.forEach(ville => {
+            this.villes.forEach((ville) => {
               if (ar_ville[1].indexOf(ville) >= 0) {
                 view = true;
               }
@@ -409,7 +409,7 @@ export default {
         var view = false;
         if (this.current_address && this.current_address.length > 0) {
           if (this.current_address) {
-            this.list_box.forEach(box => {
+            this.list_box.forEach((box) => {
               if (this.current_address.indexOf(box) >= 0) {
                 view = true;
               }
@@ -457,7 +457,7 @@ export default {
         this.route = route;
         this.locality = locality;
       }
-    }
-  }
+    },
+  },
 };
 </script>

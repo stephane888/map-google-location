@@ -2,18 +2,16 @@
   <div id="app">
     <div class="container-map-localisation">
       <h1>Localisation google</h1>
-      <googleplace :configs="configs"></googleplace>
+      <googleplace :configs="configs" />
     </div>
     <div>
-      <manager-config :configs="configs"></manager-config>
+      <manager-config />
     </div>
   </div>
 </template>
-
 <script>
 import googleplace from "./components/googleplace.vue";
 import { mapState } from "vuex";
-
 export default {
   name: "App",
   components: {

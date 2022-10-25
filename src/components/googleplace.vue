@@ -4,10 +4,10 @@
       <div class="input-group mb-2">
         <input
           :id="id_html"
+          v-model="current_address"
           class="form-control"
           type="text"
           :placeholder="configs.input_placeholder.value"
-          v-model="current_address"
         />
         <div class="input-group-prepend">
           <button
@@ -30,16 +30,17 @@ import config from "./config.js";
 import mapgoogle from "./mapgoogle.vue";
 
 export default {
-  name: "Googleplace",
+  name: "GooglePlace",
+  components: {
+    mapgoogle,
+  },
   props: {
     configs: {
       type: Object,
       required: true,
     },
   },
-  components: {
-    mapgoogle,
-  },
+
   data: function () {
     return {
       id_html: "id_googleplace",

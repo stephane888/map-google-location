@@ -9,16 +9,16 @@ export default {
     const loader = new Loader({
       apiKey: this.apiKey,
       version: "weekly",
-      libraries: ["places", "geometry"]
+      libraries: ["places", "geometry"],
     });
-    return new Promise(resolv => {
+    return new Promise((resolv) => {
       loader
         .load()
-        .then(google => {
+        .then((google) => {
           this.GoogleObejct = google;
           resolv(google);
         })
-        .catch(e => {
+        .catch((e) => {
           console.log("Erreur initialisation de la MAP : ", e);
         });
     });
@@ -44,6 +44,6 @@ export default {
    * @param {*} string
    */
   convertNewLineToArray(string, serach = "\n") {
-    return string.split(serach).map(item => item.trim());
-  }
+    return string.split(serach).map((item) => item.trim());
+  },
 };
