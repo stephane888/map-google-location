@@ -1,10 +1,10 @@
 module.exports = {
   // @source https://eslint.vuejs.org/rules/
   extends: [
+    "plugin:prettier-vue/recommended",
     "plugin:vue/essential",
     "plugin:vue/strongly-recommended",
     "plugin:vue/recommended",
-    //"plugin:prettier-vue/recommended",
   ],
   root: true,
 

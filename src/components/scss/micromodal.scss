@@ -1,7 +1,9 @@
 /**************************\
   Basic Modal Styles
 \**************************/
-::v-deep {
+//::v-deep { /* this is wrong */
+:deep(div) {
+  /* this is correct */
   .modal__overlay {
     position: fixed;
     top: 0;

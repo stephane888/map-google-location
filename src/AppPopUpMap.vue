@@ -1,12 +1,14 @@
 <template>
-  <mapgoogle
-    ref="mapgoogle"
-    :configs="configs"
-    :etape-checkout="etapeCheckout"
-    :action-after="actionAfter"
-    @update_location="update_location"
-  >
-  </mapgoogle>
+  <div>
+    <map-google
+      ref="mapgoogle"
+      :configs="configs"
+      :etape-checkout="etapeCheckout"
+      :action-after="actionAfter"
+      @update_location="update_location"
+    >
+    </map-google>
+  </div>
 </template>
 
 <script>
@@ -16,6 +18,9 @@ import mapgoogle from "./components/mapgoogle.vue";
 export default {
   name: "AppPopUpMap",
   store,
+  components: {
+    "map-google": mapgoogle,
+  },
   props: {
     etapeCheckout: {
       type: Boolean,
@@ -26,9 +31,7 @@ export default {
       required: true,
     },
   },
-  components: {
-    mapgoogle,
-  },
+
   computed: {
     ...mapState(["configs"]),
   },
