@@ -1,6 +1,8 @@
 <template>
   <div>
     <section class="border p-4 my-5">
+      configs:
+      <pre>{{ configs }}</pre>
       <h1 class="titre">Configuration de la map</h1>
       <b-form-group label="Api Key">
         <b-form-input v-model="configs.mapConfig.apiKey" />
@@ -80,18 +82,28 @@ const keyConfig = "google-config";
 AjaxBasic.TestDomain = "http://habeuk.kksa";
 export default {
   name: "ManageConfig",
-  props: {},
+  props: {
+    // configs: {
+    //   type: Object,
+    //   //required: ture,
+    //   default: function () {
+    //     return {};
+    //   },
+    // },
+  },
   data() {
     return {
       shop: AjaxBasic.isLocalDev ? "creneaux-reservation.kksa" : query.shop,
+      /** cette variable sera utiliser pour mettre a jour la configuration  de la map
+       * @params {Object} configs
+       */
+      editableConfigs: this.configs,
     };
   },
   computed: {
     ...mapState(["configs"]),
   },
-  mounted() {
-    console.log("configs", this.configs);
-  },
+  mounted() {},
   methods: {
     SavePreProdConfig() {
       AjaxBasic.post("/shopify-api-rest/save-configs", this.configs, {
