@@ -89,6 +89,9 @@ export default {
   computed: {
     ...mapState(["configs"]),
   },
+  mounted() {
+    console.log("configs", this.configs);
+  },
   methods: {
     SavePreProdConfig() {
       AjaxBasic.post("/shopify-api-rest/save-configs", this.configs, {

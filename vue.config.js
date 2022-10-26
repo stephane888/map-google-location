@@ -1,7 +1,8 @@
 //const envModeDev = process.env.NODE_ENV !== "production";
 module.exports = {
-  /*
   lintOnSave: true,
+  /*
+  
   chainWebpack: (config) => {
     config.module.rule("eslint").use("eslint-loader").options({
       fix: true,
@@ -31,5 +32,5 @@ module.exports = {
   },
   devServer: {
     // host: "map-google-location.kksa",
-  },
+  }
 };
