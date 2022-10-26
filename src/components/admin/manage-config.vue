@@ -1,8 +1,8 @@
 <template>
   <div>
     <section class="border p-4 my-5">
-      configs:
-      <pre>{{ configs }}</pre>
+      <!-- configs:
+      <pre>{{ configs }}</pre> -->
       <h1 class="titre">Configuration de la map</h1>
       <b-form-group label="Api Key">
         <b-form-input v-model="configs.mapConfig.apiKey" />
